@@ -15,6 +15,7 @@ async fn proxy(_: Request<hyper::body::Incoming>) -> anyhow::Result<Response<Ful
     let url = upstream_url.parse::<hyper::Uri>()?;
 
     let host = url.host().expect("uri has no host");
+    // TODO default depends on http(s)
     let port = url.port_u16().unwrap_or(80);
     let address = format!("{}:{}", host, port);
 
@@ -31,6 +32,7 @@ async fn proxy(_: Request<hyper::body::Incoming>) -> anyhow::Result<Response<Ful
     });
 
     // The authority of our URL will be the hostname of the httpbin remote
+    // TODO MDN says should include port (if not default), not include username, password
     let authority = url.authority().unwrap().clone();
 
     // Create an HTTP request with an empty body and a HOST header
@@ -51,6 +53,7 @@ async fn proxy(_: Request<hyper::body::Incoming>) -> anyhow::Result<Response<Ful
 async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     // We create a TcpListener and bind it to 127.0.0.1:3000
     let listener = {
+        // TODO configurable port & bind address
         let addr = SocketAddr::from(([127, 0, 0, 1], 8080));
         TcpListener::bind(addr).await?
     };

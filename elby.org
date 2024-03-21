@@ -1,0 +1,29 @@
+* service discovery
+* connection pool
+** TODO limit concurrent requests in flight
+* load balancing tactics
+** fewest requests in flight
+** best latency from recent requests
+some way to ensure backends not recently used still get traffic.  Gradually revert to mean if we haven't sent any traffic?
+** response headers with load info
+** separate endpoint with load info
+Prometheus?  custom format?
+** external metrics of load?
+Query Prometheus directly?
+* bounded queue of pending requests
+** TODO count queued requests for internal use
+can share this count with metrics or not
+** TODO if too many requests are queued
+* metrics
+** TODO count upstream & downstream connections
+** TODO count active requests
+or started / finished
+** TODO count queued requests
+or arrived separately from started to backends
+** TODO some measure of queue time
+- record time entering queue
+- histogram time in queue?
+* configuration management
+** TODO read config from env vars
+** TODO validate config at startup
+** TODO hot reload
