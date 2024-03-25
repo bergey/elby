@@ -1,3 +1,5 @@
+mod balance;
+
 use http_body_util::{BodyExt, Empty, Full};
 use hyper::body::Bytes;
 use hyper::server::conn::http1;
@@ -8,11 +10,11 @@ use std::net::SocketAddr;
 use tokio::net::TcpListener;
 use tokio::net::TcpStream;
 
-const upstream_url: &str = "http://httpbin.org/ip";
+const UPSTREAM_URL: &str = "http://httpbin.org/ip";
 
 async fn proxy(_: Request<hyper::body::Incoming>) -> anyhow::Result<Response<Full<Bytes>>> {
     // Ok(Response::new(Full::new(Bytes::from("Hello, World!"))))
-    let url = upstream_url.parse::<hyper::Uri>()?;
+    let url = UPSTREAM_URL.parse::<hyper::Uri>()?;
 
     let host = url.host().expect("uri has no host");
     // TODO default depends on http(s)
