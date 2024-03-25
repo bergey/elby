@@ -12,8 +12,9 @@ use tokio::net::TcpStream;
 
 const UPSTREAM_URL: &str = "http://httpbin.org/ip";
 
+fn 
+
 async fn proxy(_: Request<hyper::body::Incoming>) -> anyhow::Result<Response<Full<Bytes>>> {
-    // Ok(Response::new(Full::new(Bytes::from("Hello, World!"))))
     let url = UPSTREAM_URL.parse::<hyper::Uri>()?;
 
     let host = url.host().expect("uri has no host");
@@ -38,6 +39,7 @@ async fn proxy(_: Request<hyper::body::Incoming>) -> anyhow::Result<Response<Ful
     let authority = url.authority().unwrap().clone();
 
     // Create an HTTP request with an empty body and a HOST header
+    // TODO copy / modify incoming request
     let req = Request::builder()
         .uri(url)
         .header(hyper::header::HOST, authority.as_str())
@@ -59,6 +61,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         let addr = SocketAddr::from(([127, 0, 0, 1], 8080));
         TcpListener::bind(addr).await?
     };
+
+    let mut balancer = {
+        let servers = Vec::new();
+        servers.push();
+        let mut robin = RoundRobin::new();
+        robin.update(servers);
+        Arc::new(Mutex::new(robin))
+    }
 
     // We start a loop to continuously accept incoming connections
     loop {

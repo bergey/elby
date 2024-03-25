@@ -1,7 +1,13 @@
 * service discovery
+** single address
+** fixed list
+** DNS A records
+** DNS SRV records
 * connection pool
 ** TODO limit concurrent requests in flight
 * load balancing tactics
+** WIP round robin
+CLOCK: [2024-03-25 Mon 12:02]--[2024-03-25 Mon 12:18] =>  0:16
 ** fewest requests in flight
 ** best latency from recent requests
 some way to ensure backends not recently used still get traffic.  Gradually revert to mean if we haven't sent any traffic?
